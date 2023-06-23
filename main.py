@@ -18,7 +18,27 @@ def mostra_proposte():
 
 def vota_proposta():
     # Chiedi all'utente di inserire il numero della proposta da votare
-    return
+    numero_proposta = input("Che proposta voti? ")
+    proposta = "proposta:" + numero_proposta
+    
+    # Controlla se la proposta esiste nel database
+    if not r.exists(proposta):
+        print("Proposta non valida")
+        return
+
+    # Chiedi all'utente di inserire il proprio nome
+    nome_studente = input("Chi sei? ")
+
+    # Controlla se lo studente ha già votato la proposta
+    if r.sismember("voti:" + nome_studente, proposta):
+        print("Hai già votato questa proposta")
+        return
+
+    # Incrementa il numero di voti della proposta e aggiungi il voto dello studente
+    r.hincrby(proposta, "voti", amount=1)
+    r.sadd("voti:" + nome_studente, proposta)
+    print("Voto registrato con successo")
+
 
 
 def mostra_menu():
