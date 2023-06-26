@@ -48,7 +48,15 @@ def carica_proposta(username):
     
 def mostra_proposte():
     # Mostra tutte le proposte attuali ordinate per numero di voti
-    return
+    proposte = r.keys("proposta:*")
+    proposte = sorted(proposte, key=lambda p: int(r.hget(p, "voti")), reverse=True)
+    for proposta in proposte:
+        descrizione = r.hget(proposta, "descrizione").decode("utf-8")
+        proponenti = r.hget(proposta, "proponenti").decode("utf-8")
+        voti = r.hget(proposta, "voti").decode("utf-8")
+        proponenti = " ".join(proponenti.split(","))  # Replace commas with spaces
+        print(f"{descrizione} ({proponenti}): {voti} voti")
+
 
 
 def vota_proposta():
