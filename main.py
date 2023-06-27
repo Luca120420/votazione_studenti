@@ -6,6 +6,10 @@ r = redis.Redis(
   port=13715,
   password='jlXH1esGaf93WTtDkkrH8j0BUtHtEOU3')
 
+def login():
+    
+    return
+
 def carica_proposta(username):
     # Chiedi all'utente di inserire la descrizione della proposta
     descrizione = input("Descrivi la proposta: ")
@@ -86,6 +90,7 @@ def vota_proposta():
 
 def mostra_menu():
     #richiama le altre funzioni
+    username = login()
     while True:
         print("\nProposte attuali:")
         mostra_proposte()
