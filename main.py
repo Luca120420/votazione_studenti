@@ -7,8 +7,34 @@ r = redis.Redis(
   password='jlXH1esGaf93WTtDkkrH8j0BUtHtEOU3')
 
 def login():
-    
-    return
+    while True:
+        scelta = input("Vuoi registrarti o accedere ((r/a))? ")
+
+        if scelta.lower() == 'r':
+            username = input("Inserisci il tuo username: ")
+            if r.hexists("users", username):
+               print("L'username è già stato registrato. Scegli un altro username.")
+               continue
+            password = input("Inserisci la tua password: ")
+            r.hset("users", username, password)
+        elif scelta.lower() == 'a':
+            username = input("username: ")
+            password = input("password: ")
+
+            stored_password = r.hget("users", username)
+            if stored_password == None:
+                print("Username o password errati!!")
+            elif stored_password.decode() == password:
+                print("Accesso riuscito!")
+                break
+            else:
+                print("Username o password erati!")
+        else:
+            print("Scelta non valida!")
+        
+    return username
+
+
 
 def carica_proposta(username):
     # Chiedi all'utente di inserire la descrizione della proposta
