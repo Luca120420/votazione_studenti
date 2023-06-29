@@ -6,9 +6,11 @@ r = redis.Redis(
   port=13715,
   password='jlXH1esGaf93WTtDkkrH8j0BUtHtEOU3')
 
+# r.flushall() 
+
 def login():
     while True:
-        scelta = input("Vuoi registrarti o accedere ((r/a))? ")
+        scelta = input("Vuoi registrarti o accedere (r/a)? ")
 
         if scelta.lower() == 'r':
             username = input("Inserisci il tuo username: ")
@@ -28,7 +30,7 @@ def login():
                 print("Accesso riuscito!")
                 break
             else:
-                print("Username o password erati!")
+                print("Username o password errati!")
         else:
             print("Scelta non valida!")
         
@@ -64,7 +66,7 @@ def carica_proposta(username):
             proponenti = input("Inserisci i loro nomi e separali da una virgola ").split(',')
             if username not in proponenti:
                 proponenti.append(username)
-        else:
+        elif solo.lower() == 'n':
             proponenti = [username]
         
         # Crea una nuova chiave per la proposta nel database Redis
@@ -89,7 +91,7 @@ def mostra_proposte():
 
 
 
-def vota_proposta():
+def vota_proposta(nome_studente):
     # Chiedi all'utente di inserire il numero della proposta da votare
     numero_proposta = input("Che proposta voti? ")
     proposta = "proposta:" + numero_proposta
@@ -98,9 +100,6 @@ def vota_proposta():
     if not r.exists(proposta):
         print("Proposta non valida")
         return
-
-    # Chiedi all'utente di inserire il proprio nome
-    nome_studente = input("Chi sei? ")
 
     # Controlla se lo studente ha già votato la proposta
     if r.sismember("voti:" + nome_studente, proposta):
@@ -129,7 +128,7 @@ def mostra_menu():
             carica_proposta(username)
         elif opzione == "v":
             mostra_proposte()
-            vota_proposta()
+            vota_proposta(username)
         else:
             print("Opzione non valida")
 
